@@ -1,0 +1,561 @@
+<!doctype html>
+<html lang="en" data-mg-site="Git commands" data-mg-here="/git-commands/">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Git commands · plain-language reference with examples</title>
+<meta name="description" content="Plain-language git and gh command reference with copyable examples and what you would see. Works offline, runs fully in your browser.">
+<meta name="color-scheme" content="light dark">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230d1117'/%3E%3Ctext x='4' y='22' font-family='monospace' font-size='15' fill='%23f0883e'%3Egit%3C/text%3E%3C/svg%3E">
+<!--mg:head inline--><style id="mg-shared-css">
+/* mg-shared.css: shared design tokens, header bar and footer. Single source: manideepgrandhi.github.io/assets/ */
+:root{--mg-accent:#0b63c9;--mg-accent-ink:#fff;--mg-bg:#f7f9fc;--mg-surface:#ffffff;--mg-surface2:#eef2f7;--mg-ink:#14213d;--mg-muted:#5b6475;--mg-line:#e3e7ee;
+ --mg-font:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;--mg-mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;--mg-radius:10px;--mg-space:12px;--mg-bar-h:44px}
+html[data-theme=dark]{--mg-accent:#5aa2ff;--mg-accent-ink:#06142b;--mg-bg:#0d1424;--mg-surface:#121b2f;--mg-surface2:#1a2540;--mg-ink:#e6ebf5;--mg-muted:#9aa4b6;--mg-line:#26324a;color-scheme:dark}
+html[data-theme=light]{color-scheme:light}
+.mg-bar,.mg-foot{font:500 13.5px/1.4 var(--mg-font);color:var(--mg-ink);background:var(--mg-surface);-webkit-font-smoothing:antialiased;text-align:left;letter-spacing:normal;text-transform:none}
+.mg-bar *,.mg-foot *{box-sizing:border-box}
+.mg-bar{position:relative;z-index:60;border-bottom:1px solid var(--mg-line)}
+.mg-in{max-width:1280px;margin:0 auto;padding:0 16px;display:flex;align-items:center;gap:10px}
+.mg-bar .mg-in{height:var(--mg-bar-h)}
+.mg-bar a,.mg-foot a{color:inherit;text-decoration:none;background:none;border:0;font:inherit;padding:0;margin:0}
+.mg-brand{display:flex;align-items:center;gap:8px;font-weight:800!important;letter-spacing:-.01em;white-space:nowrap;flex:none}
+.mg-mark{display:inline-grid;place-items:center;width:26px;height:26px;border-radius:7px;background:var(--mg-accent);color:var(--mg-accent-ink);font:800 11.5px/1 var(--mg-font);letter-spacing:.02em}
+.mg-site{color:var(--mg-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;padding-left:10px;border-left:1px solid var(--mg-line)}
+.mg-nav{display:flex;align-items:center;gap:2px;margin-left:auto;flex:none}
+.mg-locals{display:flex;gap:2px;padding-right:8px;margin-right:6px;border-right:1px solid var(--mg-line)}
+.mg-bar .mg-nav a{padding:5px 8px!important;border-radius:6px;color:var(--mg-muted);white-space:nowrap}
+.mg-bar .mg-nav a:hover{color:var(--mg-ink);background:var(--mg-surface2)}
+.mg-bar .mg-nav a[aria-current=page]{color:var(--mg-accent);font-weight:700}
+.mg-bar button.mg-btn{all:unset;box-sizing:border-box;display:inline-grid;place-items:center;width:32px;height:32px;border-radius:8px;border:1px solid var(--mg-line);color:var(--mg-ink);background:var(--mg-surface);font:16px/1 var(--mg-font);cursor:pointer;flex:none}
+.mg-bar button.mg-btn:hover{border-color:var(--mg-accent)}
+.mg-bar button.mg-btn:focus-visible,.mg-bar a:focus-visible,.mg-foot a:focus-visible{outline:2px solid var(--mg-accent);outline-offset:2px}
+.mg-bar .mg-menu{display:none!important}
+.mg-foot{border-top:1px solid var(--mg-line);margin-top:32px;color:var(--mg-muted);font-size:12.5px;padding:14px 0 calc(14px + var(--mg-foot-pad,0px) + env(safe-area-inset-bottom,0px))}
+.mg-foot .mg-in{flex-wrap:wrap;gap:6px 14px;justify-content:space-between}
+.mg-flinks{display:flex;flex-wrap:wrap;gap:4px 12px}
+.mg-foot a:hover{color:var(--mg-accent)}
+.mg-foot a[aria-current=page]{color:var(--mg-ink);font-weight:700}
+@media (max-width:1180px){
+ .mg-bar .mg-menu{display:inline-grid!important}
+ .mg-bar .mg-theme-wrap{margin-left:auto}
+ #mg-theme{margin-left:auto}
+ .mg-nav{display:none;position:absolute;top:100%;left:0;right:0;margin:0;flex-direction:column;align-items:stretch;gap:0;background:var(--mg-surface);border-bottom:1px solid var(--mg-line);padding:6px 10px 10px;box-shadow:0 10px 24px rgba(0,0,0,.12)}
+ .mg-nav.mg-open{display:flex}
+ .mg-locals{flex-direction:column;border-right:0;border-bottom:1px solid var(--mg-line);padding:0 0 6px;margin:0 0 6px}
+ .mg-bar .mg-nav a{padding:9px 10px!important;font-size:14.5px}
+}
+@media (max-width:480px){.mg-name{display:none}.mg-site{border-left:0;padding-left:0;font-weight:700;color:var(--mg-ink)}}
+@media print{.mg-bar,.mg-foot{display:none}}
+
+/* Personal-site family (home, projects, tools, travel): dark palette for their own tokens. Pages opt in with <body class="mg-fam">. */
+html[data-theme=dark] body.mg-fam{--accent:#5aa2ff;--accent-soft:#16294a;--ink:#e6ebf5;--muted:#9aa4b6;--line:#26324a;--bg:#0d1424;--card:#121b2f;--ok:#4cc27a;--warn:#f0a340;--bad:#ff7b7b;--bad-soft:#3a1a1e;--warn-soft:#33270f}
+html[data-theme=dark] .mg-fam :is(.btn-ghost,.btn:not(.btn-primary),.trip,.tl a,.stat,.wish,.toolnav button:not([aria-selected=true]),.tabs a:not([aria-current=page]),input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea,.dlg-h,.dlg-f,dialog:not(#lightbox),.card,.job:before,.tl li:before){background-color:var(--card)}
+html[data-theme=dark] .mg-fam header.hero{background:linear-gradient(180deg,#121b2f 0%,var(--bg) 100%)}
+html[data-theme=dark] .mg-fam :is(.toolnav,nav.tabs){background:rgba(13,20,36,.94)}
+html[data-theme=dark] .mg-fam :is(.tag,.chip){color:#a9cbff}
+html[data-theme=dark] .mg-fam .job ul{color:#c3cad8}
+html[data-theme=dark] .mg-fam .download{background:#16294a}
+html[data-theme=dark] .mg-fam :is(.btn-primary,.toolnav button[aria-selected=true],.tabs a[aria-current=page]){color:#06142b}
+html[data-theme=dark] .mg-fam .btn-primary:hover{background:#8bbcff}
+html[data-theme=dark] .mg-fam .toast{background:#e6ebf5;color:#0d1424}
+html[data-theme=dark] .mg-fam :is(.diff .del,.uni .d){background:#3a1a1e}
+html[data-theme=dark] .mg-fam :is(.diff .add,.uni .a){background:#12301e}
+html[data-theme=dark] .mg-fam .diff .emp{background:#1a2233}
+html[data-theme=dark] .mg-fam :is(.dd,.warnbox){background:#33270f;color:#f3c46b;border-color:#6b4e1a}
+html[data-theme=dark] .mg-fam .banner{color:#f3c46b;border-color:#6b4e1a}
+html[data-theme=dark] .mg-fam .banner.urgent{color:#ffb4b4;border-color:#6b2a2a}
+html[data-theme=dark] .mg-fam .errs{color:#ffb4b4}
+html[data-theme=dark] .mg-fam .btn-danger{border-color:#6b2a2a}
+html[data-theme=dark] .mg-fam .btn-danger:hover{color:#06142b}
+html[data-theme=dark] .mg-fam .mapbox svg>rect{fill:#0e2238}
+html[data-theme=dark] .mg-fam #lightbox .btn{background:rgba(255,255,255,.12)}
+html[data-theme=dark] .mg-fam .mapbox{background:#0e2238}
+html[data-theme=dark] .mg-fam .land{fill:#1f2c42;stroke:#3a4a63}
+html[data-theme=dark] .mg-fam .grat{stroke:#1d3352}
+html[data-theme=dark] .mg-fam .pt circle{stroke:#0d1424}
+html[data-theme=dark] .mg-fam .pt:hover circle,html[data-theme=dark] .mg-fam .pt:focus circle{fill:#5aa2ff}
+html[data-theme=dark] .mg-fam .trip .ph{background:linear-gradient(135deg,#16294a,#121b2f);color:#5d7aa6}
+html[data-theme=dark] .mg-fam .prio.low{background:#1a2233}
+html[data-theme=dark] .mg-fam .stars label{color:#4a5568}
+html[data-theme=dark] .mg-fam .stars input:checked~label,html[data-theme=dark] .mg-fam .stars label:hover,html[data-theme=dark] .mg-fam .stars label:hover~label{color:#f2a900}
+html[data-theme=dark] .mg-fam .card:hover{border-color:#3a5482}
+html[data-theme=dark] .mg-fam .leaflet-tile-pane{filter:invert(1) hue-rotate(180deg) brightness(.9) contrast(.9) saturate(.5)}
+html[data-theme=dark] .mg-fam .leaflet-container{background:#0e2238}
+html[data-theme=dark] .mg-fam img{filter:none}
+/* mg-search.css: cross-site search button + dialog (see mg-search.js). Single source: manideepgrandhi.github.io/assets/ */
+.mg-bar button.mg-btn.mg-sbtn{color:var(--mg-muted)}
+.mg-bar button.mg-btn.mg-sbtn:hover{color:var(--mg-ink)}
+@media (max-width:1180px){.mg-bar #mg-search-btn{margin-left:auto}.mg-bar #mg-search-btn~#mg-theme{margin-left:0}}
+html.mg-s-lock,html.mg-s-lock body{overflow:hidden!important}
+.mg-s-ov{position:fixed;inset:0;z-index:2147483000;background:rgba(9,14,26,.45);display:flex;align-items:flex-start;justify-content:center;padding:9vh 16px 16px;box-sizing:border-box;font:400 14px/1.45 var(--mg-font,system-ui,sans-serif);color:var(--mg-ink,#14213d);text-align:left;letter-spacing:normal;text-transform:none;-webkit-font-smoothing:antialiased}
+.mg-s-ov[hidden]{display:none!important}
+.mg-s-ov *{box-sizing:border-box}
+html[data-theme=dark] .mg-s-ov{background:rgba(0,0,0,.6)}
+.mg-s-dlg{width:100%;max-width:680px;max-height:min(640px,82vh);display:flex;flex-direction:column;background:var(--mg-surface,#fff);border:1px solid var(--mg-line,#e3e7ee);border-radius:14px;box-shadow:0 24px 60px rgba(0,0,0,.28);overflow:hidden}
+.mg-s-top{display:flex;align-items:center;gap:10px;padding:0 12px 0 16px;border-bottom:1px solid var(--mg-line,#e3e7ee);color:var(--mg-muted,#5b6475);flex:none}
+.mg-s-top svg{flex:none}
+.mg-s-ov input#mg-s-q{all:unset;flex:1;min-width:0;height:54px;font:500 17px/1.2 var(--mg-font,system-ui,sans-serif);color:var(--mg-ink,#14213d);caret-color:var(--mg-accent,#0b63c9)}
+.mg-s-ov input#mg-s-q::placeholder{color:var(--mg-muted,#5b6475);opacity:.8}
+.mg-s-ov input#mg-s-q::-webkit-search-cancel-button{-webkit-appearance:none}
+.mg-s-ov button{font:inherit;cursor:pointer}
+.mg-s-ov .mg-s-x{all:unset;cursor:pointer;font:600 11.5px/1 var(--mg-font,system-ui,sans-serif);color:var(--mg-muted,#5b6475);border:1px solid var(--mg-line,#e3e7ee);border-radius:6px;padding:5px 7px;flex:none}
+.mg-s-ov .mg-s-x:hover{color:var(--mg-ink,#14213d);border-color:var(--mg-accent,#0b63c9)}
+.mg-s-ov .mg-s-x:focus-visible,.mg-s-ex button:focus-visible{outline:2px solid var(--mg-accent,#0b63c9);outline-offset:2px}
+.mg-s-list{overflow-y:auto;overscroll-behavior:contain;padding:6px 8px 10px;flex:1;min-height:0}
+.mg-s-site{position:sticky;top:-6px;z-index:1;background:var(--mg-surface,#fff);font:700 11px/1 var(--mg-font,system-ui,sans-serif);letter-spacing:.06em;text-transform:uppercase;color:var(--mg-accent,#0b63c9);padding:12px 8px 6px}
+.mg-s-list a{display:block;padding:8px 10px;border-radius:9px;color:inherit!important;text-decoration:none!important;border:1px solid transparent;scroll-margin:34px 0 8px}
+.mg-s-list a.mg-s-on{background:var(--mg-surface2,#eef2f7);border-color:var(--mg-line,#e3e7ee)}
+.mg-s-t{display:block;font-weight:650;color:var(--mg-ink,#14213d);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mg-s-h{font-weight:500;color:var(--mg-muted,#5b6475)}
+.mg-s-sn{display:block;margin-top:2px;font-size:13px;color:var(--mg-muted,#5b6475);overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;word-break:break-word}
+.mg-s-sn code{font:12.5px/1.45 var(--mg-mono,monospace);background:none;padding:0;color:inherit;white-space:normal}
+.mg-s-ov mark{background:#ffe58a;color:#3a2a00;border-radius:3px;padding:0 1px}
+html[data-theme=dark] .mg-s-ov mark{background:#5a4a12;color:#ffe9a6}
+.mg-s-empty{padding:28px 14px;text-align:center;color:var(--mg-muted,#5b6475)}
+.mg-s-empty b{color:var(--mg-ink,#14213d);font-weight:600}
+.mg-s-err{color:var(--mg-ink,#14213d)}
+.mg-s-ex{margin-top:12px;display:flex;flex-wrap:wrap;gap:6px;justify-content:center;align-items:center}
+.mg-s-ex button{all:unset;cursor:pointer;font:500 12.5px/1 var(--mg-mono,monospace);padding:6px 9px;border-radius:999px;border:1px solid var(--mg-line,#e3e7ee);background:var(--mg-surface2,#eef2f7);color:var(--mg-ink,#14213d)}
+.mg-s-ex button:hover{border-color:var(--mg-accent,#0b63c9)}
+.mg-s-ex .mg-s-retry{font-family:var(--mg-font,system-ui,sans-serif);background:var(--mg-accent,#0b63c9);color:var(--mg-accent-ink,#fff);border-color:transparent}
+.mg-s-foot{display:flex;gap:14px;align-items:center;padding:8px 14px;border-top:1px solid var(--mg-line,#e3e7ee);font-size:12px;color:var(--mg-muted,#5b6475);flex:none}
+.mg-s-foot kbd{font:600 10.5px/1 var(--mg-font,system-ui,sans-serif);border:1px solid var(--mg-line,#e3e7ee);border-bottom-width:2px;border-radius:4px;padding:2px 4px;margin-right:2px;background:var(--mg-surface2,#eef2f7);color:var(--mg-ink,#14213d)}
+.mg-s-stat{margin-left:auto}
+@media (max-width:640px){
+ .mg-s-ov{padding:0}
+ .mg-s-dlg{max-width:none;max-height:none;height:100%;border-radius:0;border:0}
+ .mg-s-foot span:not(.mg-s-stat){display:none}
+ .mg-s-list a{padding:10px}
+}
+.mg-s-hit{animation:mg-s-hit 2s ease-out}
+@keyframes mg-s-hit{0%,30%{box-shadow:0 0 0 3px var(--mg-accent,#0b63c9);background-color:color-mix(in srgb,var(--mg-accent,#0b63c9) 12%,transparent)}100%{box-shadow:0 0 0 3px transparent}}
+@media (prefers-reduced-motion:reduce){.mg-s-hit{animation:none;outline:3px solid var(--mg-accent,#0b63c9);outline-offset:3px}}
+@media print{.mg-s-ov,#mg-search-btn{display:none!important}}
+</style><script>(function(){var h=document.documentElement,p;try{p=localStorage.getItem("mg-theme");if(!p){var o=localStorage.getItem("theme");if(o==="dark"||o==="light"){p=o;localStorage.setItem("mg-theme",p)}}}catch(e){}if(p!=="light"&&p!=="dark")p="auto";var d=p==="dark"||(p==="auto"&&window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches);h.setAttribute("data-theme",d?"dark":"light");h.setAttribute("data-theme-pref",p)})();</script><!--/mg:head-->
+<style>
+:root{--bg:#0d1117;--panel:#161b22;--panel2:#1c2330;--line:#30363d;--fg:#e6edf3;--muted:#9da7b3;--green:#3fb950;--blue:#58a6ff;--amber:#d29922;--red:#f85149;--orange:#f0883e;--term:#010409;--warnbg:#2a2312;--errbg:#2d1416;--mono:ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;color-scheme:dark}
+html[data-theme=light]{--bg:#f6f8fa;--panel:#ffffff;--panel2:#eef1f5;--line:#d0d7de;--fg:#1f2328;--muted:#57606a;--green:#1a7f37;--blue:#0969da;--amber:#9a6700;--red:#cf222e;--orange:#bc4c00;--term:#f6f8fa;--warnbg:#fff8c5;--errbg:#ffebe9;color-scheme:light}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:64px}
+html,body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+a{color:var(--blue)}
+code,pre{font-family:var(--mono)}
+.wrap{max-width:1100px;margin:0 auto;padding:0 16px}
+.hero{padding:22px 0 8px}
+.hero h1{margin:0 0 4px;font:700 26px/1.2 var(--mono);color:var(--orange)}
+.hero h1 span{color:var(--fg)}
+.hero p{margin:0;color:var(--muted);max-width:760px}
+.tools{position:sticky;top:0;z-index:20;background:var(--bg);border-bottom:1px solid var(--line);padding:10px 0;margin-top:14px}
+.tools .wrap{display:flex;flex-direction:column;gap:8px}
+.search{display:flex;gap:8px;align-items:center}
+.search input{flex:1;min-width:0;padding:9px 12px;border-radius:8px;border:1px solid var(--line);background:var(--panel);color:var(--fg);font:inherit}
+.search input:focus{outline:2px solid var(--blue);outline-offset:1px}
+.search kbd{font:12px var(--mono);border:1px solid var(--line);border-radius:5px;padding:2px 6px;color:var(--muted)}
+.count{color:var(--muted);font-size:13px;white-space:nowrap}
+.chips{display:flex;gap:6px;overflow-x:auto;padding-bottom:2px;scrollbar-width:thin}
+.chips a{flex:none;text-decoration:none;font-size:13px;color:var(--fg);border:1px solid var(--line);background:var(--panel);border-radius:999px;padding:3px 11px}
+.chips a:hover{border-color:var(--blue);color:var(--blue)}
+h2{font:700 18px/1.3 var(--mono);margin:30px 0 4px;color:var(--green)}
+h2::before{content:"$ ";color:var(--muted)}
+.gnote{margin:0 0 12px;color:var(--muted);font-size:14px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,470px),1fr));gap:12px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px 14px;min-width:0;display:flex;flex-direction:column;gap:8px}
+.card h3{margin:0;font:600 14px/1.35 var(--mono);color:var(--blue);word-break:break-word;display:flex;gap:8px;align-items:flex-start;justify-content:space-between}
+.card p{margin:0}
+.badge{flex:none;font:600 11px/1 system-ui,sans-serif;text-transform:uppercase;letter-spacing:.04em;border-radius:5px;padding:4px 6px}
+.badge.care{background:var(--warnbg);color:var(--amber);border:1px solid var(--amber)}
+.badge.danger{background:var(--errbg);color:var(--red);border:1px solid var(--red)}
+.ex{display:flex;align-items:flex-start;background:var(--term);border:1px solid var(--line);border-radius:8px}
+.ex pre{flex:1;min-width:0;margin:0;padding:10px 12px;overflow-x:auto;font-size:13px;line-height:1.5;color:var(--fg);white-space:pre}
+.ex pre::before{content:"$ ";color:var(--muted)}
+.ex.multi pre::before{content:""}
+.copy{flex:none;margin:6px 6px 0 0;font:12px system-ui,sans-serif;padding:3px 9px;border-radius:6px;border:1px solid var(--line);background:var(--panel2);color:var(--fg);cursor:pointer}
+.copy:hover{border-color:var(--blue)}
+.copy.ok{color:var(--green);border-color:var(--green)}
+.out{margin:0;padding:8px 12px;border-left:3px solid var(--line);color:var(--muted);font-size:12.5px;line-height:1.5;overflow-x:auto;white-space:pre;background:transparent}
+.outl{font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin:2px 0 -4px}
+.warn{font-size:13.5px;border-radius:8px;padding:7px 10px;background:var(--warnbg);border:1px solid var(--amber)}
+.warn.danger{background:var(--errbg);border-color:var(--red)}
+.warn b{color:var(--amber)}.warn.danger b{color:var(--red)}
+.empty{display:none;margin:30px 0;text-align:center;color:var(--muted)}
+.steps{counter-reset:s;display:grid;gap:10px}
+.step{display:grid;grid-template-columns:28px 1fr;gap:10px;align-items:start}
+.step::before{counter-increment:s;content:counter(s);display:grid;place-items:center;width:26px;height:26px;border-radius:50%;background:var(--panel2);border:1px solid var(--line);font:600 13px var(--mono);color:var(--orange);margin-top:2px}
+.step .card{gap:6px}
+mark{background:var(--amber);color:#000;border-radius:2px;padding:0 1px}
+footer.note{margin:30px 0 8px;color:var(--muted);font-size:13px}
+@media (max-width:520px){.hero h1{font-size:22px}.search kbd{display:none}.grid{grid-template-columns:1fr}}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<!--mg:body inline--><script id="mg-shared-js">
+/* mg-shared.js: shared header bar, footer and theme toggle for all of Manideep's sites.
+   Single source: manideepgrandhi.github.io/assets/. Copied inline into offline apps by scripts/sync-mg-shared.py.
+   Page config on <html>: data-mg-site="Title", data-mg-here="/path/", data-mg-local="Label|#hash,Label|#hash". */
+(function(){
+if(window.MG)return;
+var h=document.documentElement,ds=h.dataset,K="mg-theme";
+var NAV=[["Home","/"],["Projects","/projects/"],["Tools","/tools/"],["pg-commands","/pg-commands/"],["Role grantor","/pg-role-grantor/"],["DB Cheat Sheet","/db-cheatsheet/"],["Paisa Diary","/paisa-diary/"],["Travel","/travel/"],["Blog","/blog/"]];
+var ORIGIN=/^(manideepgrandhi\.github\.io|localhost|127\.0\.0\.1)$/.test(location.hostname)?"":"https://manideepgrandhi.github.io";
+var ICON={auto:"◐",light:"☀",dark:"☾"},NEXT={auto:"light",light:"dark",dark:"auto"};
+var mq=window.matchMedia?matchMedia("(prefers-color-scheme: dark)"):null;
+function pref(){var p;try{p=localStorage.getItem(K)}catch(e){}return p==="light"||p==="dark"?p:"auto";}
+function resolve(p){return p==="dark"||(p==="auto"&&mq&&mq.matches)?"dark":"light";}
+function apply(p,save){if(save){try{localStorage.setItem(K,p)}catch(e){}}var t=resolve(p);h.setAttribute("data-theme",t);h.setAttribute("data-theme-pref",p);
+ var b=document.getElementById("mg-theme");if(b){b.textContent=ICON[p];b.title="Theme: "+p+" (click to change)";b.setAttribute("aria-label","Theme: "+p+". Change theme");}
+ try{window.dispatchEvent(new CustomEvent("mg-theme",{detail:{pref:p,theme:t}}))}catch(e){}}
+window.MG={pref:pref,theme:function(){return h.getAttribute("data-theme")},set:function(p){apply(p,true)},cycle:function(){apply(NEXT[pref()],true)}};
+if(mq&&mq.addEventListener)mq.addEventListener("change",function(){if(pref()==="auto")apply("auto")});
+window.addEventListener("storage",function(e){if(e.key===K)apply(pref())});
+var here=ds.mgHere||location.pathname;
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+function link(n,u,cls){var cur=u==="/"?here==="/"||here==="/index.html":here.indexOf(u)===0;return '<a class="'+(cls||"")+'" href="'+ORIGIN+u+'"'+(cur?' aria-current="page"':"")+">"+esc(n)+"</a>";}
+var local=(ds.mgLocal||"").split(",").filter(Boolean).map(function(x){var a=x.split("|");return '<a class="mg-local" href="'+esc(a[1])+'">'+esc(a[0])+"</a>"}).join("");
+var site=ds.mgSite||"";
+var bar='<div class="mg-bar" id="mg-bar" role="navigation" aria-label="Manideep Grandhi sites"><div class="mg-in">'+
+ '<a class="mg-brand" href="'+ORIGIN+'/"><span class="mg-mark" aria-hidden="true">MG</span><span class="mg-name">Manideep Grandhi</span></a>'+
+ (site?'<span class="mg-site">'+esc(site)+"</span>":"")+
+ '<div class="mg-nav" id="mg-nav">'+(local?'<span class="mg-locals">'+local+"</span>":"")+NAV.map(function(n){return link(n[0],n[1])}).join("")+"</div>"+
+ '<button type="button" class="mg-btn" id="mg-theme"></button>'+
+ '<button type="button" class="mg-btn mg-menu" id="mg-menu" aria-expanded="false" aria-controls="mg-nav" aria-label="Sites menu">☰</button>'+
+ "</div></div>";
+var s=document.currentScript;
+if(s&&s.parentNode)s.insertAdjacentHTML("afterend",bar);else document.body.insertAdjacentHTML("afterbegin",bar);
+apply(pref());
+document.getElementById("mg-theme").addEventListener("click",function(){window.MG.cycle()});
+var mb=document.getElementById("mg-menu"),nav=document.getElementById("mg-nav");
+mb.addEventListener("click",function(){var o=nav.classList.toggle("mg-open");mb.setAttribute("aria-expanded",o);mb.textContent=o?"✕":"☰";});
+nav.addEventListener("click",function(e){if(e.target.closest("a")&&nav.classList.contains("mg-open"))mb.click();});
+document.addEventListener("keydown",function(e){if(e.key==="Escape"&&nav.classList.contains("mg-open"))mb.click();});
+function foot(){if(document.getElementById("mg-foot")||ds.mgNofoot!==undefined)return;var f=document.createElement("div");f.className="mg-foot";f.id="mg-foot";f.setAttribute("role","contentinfo");
+ f.innerHTML='<div class="mg-in"><span>© '+new Date().getFullYear()+' Manideep Grandhi</span><span class="mg-flinks">'+NAV.map(function(n){return link(n[0],n[1])}).join("")+'<a href="https://github.com/manideepgrandhi" rel="noopener">GitHub</a></span></div>';
+ var anchor=document.getElementById("mg-foot-slot");if(anchor)anchor.replaceWith(f);else document.body.appendChild(f);}
+if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",foot);else foot();
+})();
+</script><script id="mg-search-js">
+/* mg-search.js: one search box for all of Manideep's sites (button in the shared top bar, "/" or Ctrl/Cmd+K).
+   Single source: manideepgrandhi.github.io/assets/. Copied inline into offline apps by scripts/sync-mg-shared.py.
+   Index: https://manideepgrandhi.github.io/search-index.json, built by scripts/build-search-index.py from the published pages only.
+   Nothing you type leaves the browser: the index is fetched once (then kept in the Cache API for offline use) and searched locally.
+   Also gives headings without an id a stable "s-<slug>" id so results can link straight to a section. */
+(function(){
+if(window.MGSearch)return;
+var d=document,h=d.documentElement;
+var ORIGIN=/^(manideepgrandhi\.github\.io|localhost|127\.0\.0\.1)$/.test(location.hostname)?"":"https://manideepgrandhi.github.io";
+var URL_IDX=ORIGIN+"/search-index.json",CACHE="mg-search-v1",GO="mg-search-go",LASTQ="mg-search-q";
+var MAC=/Mac|iPhone|iPad/.test(navigator.platform||navigator.userAgent||"");
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+function ss(k,v){try{if(v===undefined)return sessionStorage.getItem(k);if(v===null)sessionStorage.removeItem(k);else sessionStorage.setItem(k,v)}catch(e){}}
+
+/* ---------- heading ids (same rule as slug() in build-search-index.py) ---------- */
+function slug(t){t=String(t).toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-+|-+$/g,"").slice(0,60).replace(/-+$/,"");return "s-"+(t||"section")}
+function ids(){var hs=d.querySelectorAll("h1:not([id]),h2:not([id]),h3:not([id]),h4:not([id])");
+ for(var i=0;i<hs.length;i++){var e=hs[i];if(e.closest("#mg-bar,#mg-foot,#mg-search"))continue;var b=slug(e.textContent),id=b,n=2;while(d.getElementById(id))id=b+"-"+n++;e.id=id}}
+function target(){var x=location.hash.slice(1);if(!x)return null;try{x=decodeURIComponent(x)}catch(e){}return x}
+function reveal(tries){var id=target();if(!id)return;var el=d.getElementById(id),fromSearch=ss(GO)===id;
+ if(el&&!fromSearch&&!tries)return; /* a normal anchor the browser already handled: leave it alone */
+ if(!el){ids();el=d.getElementById(id)}
+ if(!el){tries=(tries||0)+1;if(tries<5)setTimeout(function(){reveal(tries)},[0,150,400,1000,2500][tries]);else ss(GO,null);return}
+ ss(GO,null);var bar=d.getElementById("mg-bar"),off=16,sticky=d.querySelector("header.top,#hdr");
+ if(sticky&&getComputedStyle(sticky).position==="sticky")off+=sticky.offsetHeight;
+ var y=el.getBoundingClientRect().top+(window.scrollY||pageYOffset)-off;window.scrollTo(0,Math.max(0,y));
+ var box=el.closest("article,.card")||el;box.classList.remove("mg-s-hit");void box.offsetWidth;box.classList.add("mg-s-hit");setTimeout(function(){box.classList.remove("mg-s-hit")},2200);}
+function onReady(){ids();setTimeout(function(){reveal(0)},0)}
+if(d.readyState==="loading")d.addEventListener("DOMContentLoaded",onReady);else onReady();
+window.addEventListener("hashchange",function(){setTimeout(function(){reveal(0)},0)});
+
+/* ---------- index: fetch, keep a copy in the Cache API, fall back to it offline ---------- */
+var IDX=null,pending=null;
+function cacheGet(){try{return caches.open(CACHE).then(function(c){return c.match(URL_IDX)}).then(function(r){return r?r.json():null}).catch(function(){return null})}catch(e){return Promise.resolve(null)}}
+function cachePut(res){try{caches.open(CACHE).then(function(c){return c.put(URL_IDX,res)}).catch(function(){})}catch(e){}}
+function load(){if(IDX)return Promise.resolve(IDX);if(pending)return pending;
+ pending=fetch(URL_IDX,{cache:"no-cache"}).then(function(r){if(!r.ok)throw new Error("HTTP "+r.status);cachePut(r.clone());return r.json()})
+  .catch(function(err){return cacheGet().then(function(j){if(!j)throw err;return j})})
+  .then(function(j){IDX=prep(j);pending=null;return IDX},function(e){pending=null;throw e});
+ return pending}
+function warm(){/* fetch once per device so search also works offline later */
+ try{if(!window.caches||!window.fetch)return;caches.open(CACHE).then(function(c){return c.match(URL_IDX)}).then(function(r){if(!r)return fetch(URL_IDX).then(function(x){if(x.ok)cachePut(x)})}).catch(function(){})}catch(e){}}
+
+/* ---------- tokenizer + matcher (prefix, typo-tolerant) ---------- */
+var WRE;try{WRE=new RegExp("[\\p{L}\\p{N}_$]+","gu")}catch(e){WRE=/[a-z0-9_$\u00c0-\uffff]+/g}
+function toks(s,parts){var m=String(s).toLowerCase().match(WRE)||[],o=[];for(var i=0;i<m.length;i++){var w=m[i];o.push(w);
+ if(parts&&w.indexOf("_")>=0){var p=w.split("_");for(var j=0;j<p.length;j++)if(p[j])o.push(p[j])}}return o}
+function prep(j){var X={sites:j.sites,pages:j.pages,e:j.e,voc:{},keys:null};
+ function add(t,i,w){var r=X.voc[t];if(!r)r=X.voc[t]={};if(!(r[i]>=w))r[i]=w}
+ for(var i=0;i<j.e.length;i++){var e=j.e[i],pg=j.pages[e[0]],f=[[pg[2]+" "+e[2],3],[e[3],1.4],[e[4],1]];
+  for(var k=0;k<3;k++){var t=toks(f[k][0],1);for(var n=0;n<t.length;n++)add(t[n],i,f[k][1])}}
+ X.keys=Object.keys(X.voc);return X}
+function dist(a,b,max){/* Damerau-Levenshtein (optimal string alignment) with early exit */
+ var la=a.length,lb=b.length;if(Math.abs(la-lb)>max)return max+1;var p2=null,p=[],c,i,j;for(j=0;j<=lb;j++)p[j]=j;
+ for(i=1;i<=la;i++){c=[i];var lo=i;for(j=1;j<=lb;j++){var cost=a[i-1]===b[j-1]?0:1,v=Math.min(p[j]+1,c[j-1]+1,p[j-1]+cost);
+  if(p2&&i>1&&j>1&&a[i-1]===b[j-2]&&a[i-2]===b[j-1])v=Math.min(v,p2[j-2]+1);c[j]=v;if(v<lo)lo=v}
+  if(lo>max)return max+1;p2=p;p=c}return p[lb]}
+function termHits(X,q){/* -> {entry: score}, plus the vocabulary words it matched (for highlighting) */
+ var out={},words=[],max=q.length>=8?2:1;
+ for(var k=0;k<X.keys.length;k++){var w=X.keys[k],s=0;
+  if(w===q)s=3;else if(q.length>=2&&w.indexOf(q)===0)s=2.2-Math.min(.8,(w.length-q.length)*.05);
+  else if(q.length>=4&&Math.abs(w.length-q.length)<=max&&dist(q,w,max)<=max)s=1.5;
+  else if(q.length>=5&&w.length>q.length&&dist(q,w.slice(0,q.length),1)<=1)s=1.1;
+  if(!s)continue;words.push(w);var r=X.voc[w];for(var i in r){var v=s*r[i];if(!(out[i]>=v))out[i]=v}}
+ return{s:out,w:words}}
+function search(X,q){var qt=toks(q);if(!qt.length)return{r:[],w:[]};var seen={},terms=[];qt.forEach(function(t){if(!seen[t]){seen[t]=1;terms.push(t)}});
+ var hits=terms.slice(0,8).map(function(t){return termHits(X,t)}),words=[];hits.forEach(function(x){words=words.concat(x.w)});
+ var tot={},cnt={};hits.forEach(function(x){for(var i in x.s){tot[i]=(tot[i]||0)+x.s[i];cnt[i]=(cnt[i]||0)+1}});
+ var need=hits.length,ids=Object.keys(tot).filter(function(i){return cnt[i]===need});
+ if(!ids.length&&need>1)ids=Object.keys(tot).filter(function(i){return cnt[i]>=Math.ceil(need/2)});
+ var ql=q.toLowerCase().trim();
+ var r=ids.map(function(i){var e=X.e[i],pg=X.pages[e[0]],s=tot[i]+(cnt[i]<need?-2:0);var hd=(pg[2]+" "+e[2]).toLowerCase();
+  if(ql.length>2&&hd.indexOf(ql)>=0)s+=3;if(!e[1])s+=.3;return{i:+i,s:s}});
+ r.sort(function(a,b){return b.s-a.s||a.i-b.i});
+ var uniq={},out=[];for(var n=0;n<r.length&&out.length<80;n++){var e=X.e[r[n].i],k=e[0]+"#"+e[1];if(uniq[k])continue;uniq[k]=1;out.push(r[n])}
+ words.sort(function(a,b){return b.length-a.length});return{r:out,w:words.slice(0,40)}}
+function hl(text,words,len){text=String(text||"");if(!text)return"";var low=text.toLowerCase(),at=-1;
+ for(var i=0;i<words.length&&at<0;i++){var p=low.indexOf(words[i]);if(p>=0)at=p}
+ var st=0;if(len&&text.length>len){st=at>40?at-40:0;if(st){var sp=text.indexOf(" ",st);if(sp>0&&sp<at)st=sp+1}}
+ var cut=len?text.slice(st,st+len):text,pre=st>0?"…":"",post=len&&st+len<text.length?"…":"";
+ if(!words.length)return pre+esc(cut)+post;
+ var re=new RegExp("("+words.map(function(w){return w.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")}).join("|")+")","gi");
+ return pre+cut.split(re).map(function(s,k){return k%2?"<mark>"+esc(s)+"</mark>":esc(s)}).join("")+post}
+
+/* ---------- UI ---------- */
+var ov,inp,list,stat,items=[],act=-1,isOpen=false,lastFocus=null,timer;
+var ICON='<svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.6-3.6"/></svg>';
+var KEY=MAC?"⌘K":"Ctrl+K",EX=["deadlock","pg_dump","tempdb","vacuum","blocking","sticky"];
+function build(){if(ov)return;ov=d.createElement("div");ov.id="mg-search";ov.className="mg-s-ov";ov.hidden=true;
+ ov.innerHTML='<div class="mg-s-dlg" role="dialog" aria-modal="true" aria-label="Search all sites">'+
+ '<div class="mg-s-top">'+ICON+'<input id="mg-s-q" type="search" placeholder="Search all my sites…" autocomplete="off" autocapitalize="off" spellcheck="false" enterkeyhint="go" role="combobox" aria-expanded="true" aria-controls="mg-s-list" aria-autocomplete="list">'+
+ '<button type="button" class="mg-s-x" aria-label="Close search">Esc</button></div>'+
+ '<div class="mg-s-list" id="mg-s-list" role="listbox" aria-label="Results"></div>'+
+ '<div class="mg-s-foot"><span><kbd>↑</kbd><kbd>↓</kbd> move</span><span><kbd>Enter</kbd> open</span><span><kbd>Esc</kbd> close</span><span class="mg-s-stat" aria-live="polite"></span></div></div>';
+ d.body.appendChild(ov);inp=ov.querySelector("input");list=ov.querySelector(".mg-s-list");stat=ov.querySelector(".mg-s-stat");
+ ov.addEventListener("mousedown",function(e){if(e.target===ov)close()});
+ ov.querySelector(".mg-s-x").addEventListener("click",close);
+ inp.addEventListener("input",function(){clearTimeout(timer);timer=setTimeout(run,60)});
+ inp.addEventListener("keydown",key);ov.addEventListener("keydown",function(e){if(e.key==="Escape"){e.preventDefault();e.stopPropagation();close()}else if(e.key==="Tab"){e.preventDefault();inp.focus()}});
+ list.addEventListener("click",function(e){var a=e.target.closest("a[data-i]");if(a&&!e.ctrlKey&&!e.metaKey&&!e.shiftKey&&e.button===0){e.preventDefault();go(+a.dataset.i)}
+  var x=e.target.closest("button[data-q]");if(x){inp.value=x.dataset.q;run();inp.focus()}});
+ list.addEventListener("mousemove",function(e){var a=e.target.closest("a[data-i]");if(a&&+a.dataset.i!==act)setAct(+a.dataset.i,false)});}
+function key(e){if(e.key==="ArrowDown"||e.key==="ArrowUp"){e.preventDefault();if(!items.length)return;var n=act+(e.key==="ArrowDown"?1:-1);setAct((n+items.length)%items.length,true)}
+ else if(e.key==="Enter"){e.preventDefault();if(act>=0)go(act,e.ctrlKey||e.metaKey)}
+ else if(e.key==="Home"&&items.length&&!inp.value){setAct(0,true)}}
+function setAct(i,scroll){act=i;var as=list.querySelectorAll("a[data-i]");for(var k=0;k<as.length;k++){var on=k===i;as[k].classList.toggle("mg-s-on",on);as[k].setAttribute("aria-selected",on)}
+ var a=as[i];if(a){inp.setAttribute("aria-activedescendant",a.id);if(scroll)a.scrollIntoView({block:"nearest"})}}
+function href(it){var X=IDX,e=X.e[it.i],pg=X.pages[e[0]];return ORIGIN+pg[1]+(e[1]?"#"+e[1].replace(/ /g,"%20"):"")}
+function go(i,newTab){var it=items[i];if(!it)return;var url=href(it),e=IDX.e[it.i],pg=IDX.pages[e[0]];ss(LASTQ,inp.value);
+ if(newTab){window.open(url,"_blank","noopener");return}
+ if(e[1])ss(GO,e[1]);
+ var here=location.pathname.replace(/index\.html$/,""),there=pg[1].replace(/index\.html$/,"");
+ if(!ORIGIN&&here===there){close();if(location.hash==="#"+e[1]||!e[1]){if(e[1])reveal(1);else window.scrollTo(0,0)}else location.hash=e[1];return}
+ location.href=url}
+function empty(msg){var sites=IDX?IDX.sites.map(function(s){return esc(s[0])}).join(" · "):"";
+ list.innerHTML='<div class="mg-s-empty">'+(msg||"Type to search "+(sites?"<b>"+sites+"</b>":"all my sites")+".")+
+ '<div class="mg-s-ex">Try '+EX.map(function(x){return '<button type="button" data-q="'+x+'">'+x+"</button>"}).join("")+"</div></div>";items=[];act=-1;inp.removeAttribute("aria-activedescendant")}
+function run(){var q=inp.value;if(!IDX){return}
+ if(!q.trim()){empty();stat.textContent=IDX.e.length+" sections indexed";return}
+ var t0=Date.now(),res=search(IDX,q),X=IDX;
+ if(!res.r.length){empty('No matches for “'+esc(q.trim())+'”. Check the spelling or try fewer words.');stat.textContent="0 results";return}
+ var g={},order=[];res.r.forEach(function(r){var s=X.pages[X.e[r.i][0]][0];if(!g[s]){g[s]=[];order.push(s)}if(g[s].length<8)g[s].push(r)});
+ items=[];var html="";order.forEach(function(s){html+='<div class="mg-s-grp" role="group" aria-label="'+esc(X.sites[s][0])+'"><div class="mg-s-site">'+esc(X.sites[s][0])+"</div>";
+  g[s].forEach(function(r){var e=X.e[r.i],pg=X.pages[e[0]],n=items.length;items.push(r);var head=e[2]&&e[2]!==pg[2]?e[2]:"";
+   var sn=e[3]&&res.w.some(function(w){return e[3].toLowerCase().indexOf(w)>=0})?hl(e[3],res.w,150):e[4]&&res.w.some(function(w){return e[4].toLowerCase().indexOf(w)>=0})?'<code>'+hl(e[4],res.w,120)+"</code>":hl(e[3]||"",res.w,150);
+   html+='<a id="mg-s-r'+n+'" role="option" aria-selected="false" data-i="'+n+'" href="'+esc(href(r))+'"><span class="mg-s-t">'+hl(pg[2],res.w)+(head?' <span class="mg-s-h">› '+hl(head,res.w)+"</span>":"")+"</span>"+(sn?'<span class="mg-s-sn">'+sn+"</span>":"")+"</a>"});
+  html+="</div>"});
+ list.innerHTML=html;list.scrollTop=0;setAct(0,false);stat.textContent=res.r.length+(res.r.length>=80?"+":"")+" result"+(res.r.length===1?"":"s")+" · "+(Date.now()-t0)+" ms"}
+function open(){build();if(isOpen)return;isOpen=true;lastFocus=d.activeElement;ov.hidden=false;h.classList.add("mg-s-lock");
+ var b=d.getElementById("mg-search-btn");if(b)b.setAttribute("aria-expanded","true");
+ if(!inp.value){var l=ss(LASTQ);if(l)inp.value=l}inp.focus();inp.select();
+ if(IDX){run();return}
+ list.innerHTML='<div class="mg-s-empty">Loading the search index…</div>';stat.textContent="";
+ load().then(function(){if(isOpen)run()},function(){if(!isOpen)return;
+  list.innerHTML='<div class="mg-s-empty mg-s-err">Couldn’t load the search index'+(navigator.onLine===false?" (you’re offline and it hasn’t been saved on this device yet)":"")+'.<div class="mg-s-ex"><button type="button" class="mg-s-retry">Try again</button></div></div>';
+  var rb=list.querySelector(".mg-s-retry");rb.addEventListener("click",function(){isOpen=false;ov.hidden=true;open()})})}
+function close(){if(!isOpen)return;isOpen=false;ov.hidden=true;h.classList.remove("mg-s-lock");var b=d.getElementById("mg-search-btn");if(b)b.setAttribute("aria-expanded","false");
+ if(inp.value)ss(LASTQ,inp.value);if(lastFocus&&lastFocus.focus)try{lastFocus.focus({preventScroll:true})}catch(e){}}
+function typing(t){return t&&(/^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName)||t.isContentEditable)}
+/* window (not document) listener: page shortcuts on document run first; if a page already uses "/" (pg-commands, Sticky Pad) it keeps it */
+window.addEventListener("keydown",function(e){var k=e.key;
+ if((e.ctrlKey||e.metaKey)&&!e.altKey&&!e.shiftKey&&(k==="k"||k==="K")){e.preventDefault();isOpen?close():open();return}
+ if(k==="/"&&!isOpen&&!e.ctrlKey&&!e.metaKey&&!e.altKey&&!e.defaultPrevented&&!typing(e.target)){e.preventDefault();open()}});
+
+function button(){if(d.getElementById("mg-search-btn"))return true;var t=d.getElementById("mg-theme");if(!t)return false;
+ var b=d.createElement("button");b.type="button";b.className="mg-btn mg-sbtn";b.id="mg-search-btn";b.innerHTML=ICON;
+ b.title="Search all sites (/ or "+KEY+")";b.setAttribute("aria-label","Search all sites");b.setAttribute("aria-haspopup","dialog");b.setAttribute("aria-expanded","false");
+ b.addEventListener("click",open);b.addEventListener("pointerenter",function(){load().catch(function(){})},{once:true});t.parentNode.insertBefore(b,t);return true}
+if(!button())d.addEventListener("DOMContentLoaded",button);
+window.addEventListener("load",function(){(window.requestIdleCallback||function(f){setTimeout(f,2500)})(warm)});
+window.MGSearch={open:open,close:close,load:load,search:function(q){return load().then(function(X){var r=search(X,q);return r.r.map(function(x){var e=X.e[x.i],pg=X.pages[e[0]];return{site:X.sites[pg[0]][0],page:pg[2],heading:e[2],url:href(x),score:x.s}})})},slug:slug};
+})();
+</script><!--/mg:body-->
+<header class="hero"><div class="wrap">
+<h1><span>$</span> git commands</h1>
+<p>A plain-words reference with an example you can copy and what you would see when you run it. Written for DBAs and other non-developers: each command says what it does to your files and commits, and risky ones are marked.</p>
+</div></header>
+
+<div class="tools"><div class="wrap">
+<div class="search"><input id="q" type="search" placeholder="Filter, e.g. undo, push, stash" autocomplete="off" spellcheck="false" aria-label="Filter commands"><kbd>/</kbd><span class="count" id="count" aria-live="polite"></span></div>
+<nav class="chips" id="chips" aria-label="Command groups"></nav>
+</div></div>
+
+<main class="wrap" id="main"><noscript><p>This page needs JavaScript to show the commands.</p></noscript></main>
+<p class="empty wrap" id="empty">No command matches. Try a shorter word, like <code>undo</code> or <code>branch</code>.</p>
+<div class="wrap"><footer class="note">Outputs were produced with git 2.47 and trimmed; your hashes, dates and paths will differ. Placeholders such as <code>&lt;branch&gt;</code> are yours to fill in. Nothing on this page sends data anywhere.</footer></div>
+<div id="mg-foot-slot"></div>
+
+<script>
+/* kind: 'care' = double-check first, 'danger' = can lose work or rewrite shared history. m = multi-line example (no leading $). */
+var GROUPS=[
+{id:"setup",t:"Setup & identity",n:"Do this once per computer. Git stamps every commit with a name and email, so get these right first.",c:[
+{c:"git config --global user.name / user.email",d:"Sets who you are for every repository on this computer. On GitHub, the 'noreply' address keeps your real email private (find yours in GitHub → Settings → Emails).",m:1,ex:"git config --global user.name \"Manideep Grandhi\"\ngit config --global user.email \"manideepgrandhi@users.noreply.github.com\"",out:"(no output means it worked)"},
+{c:"git config user.email",d:"Shows which email git will use right now in this folder. Run it inside the repository, not outside.",ex:"git config user.email",out:"manideepgrandhi@users.noreply.github.com"},
+{c:"git config --show-origin user.email",d:"Shows the email and the file it came from. This tells you whether a global or a repo-local setting is winning.",ex:"git config --show-origin user.email",out:"file:.git/config\tother@example.com"},
+{c:"--global vs repo-local",d:"--global lives in your home folder and covers every repo. Without --global the setting is saved inside that one repo (.git/config) and beats the global one. A leftover repo-local value is the usual reason commits show the wrong author.",kind:"care",w:"If commits show the wrong name or email, run the --show-origin command above in that repo. If it points to .git/config, remove it with the next command and the global value takes over.",m:1,ex:"# this repo only (beats --global)\ngit config user.email \"someone@example.com\"\n# remove the repo-local value\ngit config --local --unset user.email\ngit config --local --unset user.name",out:"(no output; run git config --show-origin user.email again to check)"},
+{c:"git config --global --list",d:"Lists every global setting.",ex:"git config --global --list",out:"user.name=Manideep Grandhi\nuser.email=manideepgrandhi@users.noreply.github.com\ninit.defaultbranch=main"},
+{c:"git config --global init.defaultBranch main",d:"Makes new repositories start on a branch called main instead of master.",ex:"git config --global init.defaultBranch main",out:"(no output)"},
+{c:"git config --global pull.rebase false",d:"Tells git what to do when 'git pull' finds that both you and the remote have new commits. false = merge (use true to rebase instead). Without it git stops with a 'divergent branches' error.",ex:"git config --global pull.rebase false",out:"(no output)"}
+]},
+{id:"start",t:"Start",n:"Get a repository onto your computer, either a copy of an existing one or a brand-new one.",c:[
+{c:"git clone <url> [folder]",d:"Downloads a repository with its full history into a new folder and remembers where it came from (the remote called origin).",ex:"git clone https://github.com/manideepgrandhi/pg-commands.git",out:"Cloning into 'pg-commands'...\nremote: Enumerating objects: 120, done.\nReceiving objects: 100% (120/120), done."},
+{c:"git init",d:"Turns the current folder into a new, empty repository (adds a hidden .git folder). Nothing is tracked yet.",ex:"mkdir my-scripts && cd my-scripts\ngit init -b main",m:1,out:"Initialized empty Git repository in /home/you/my-scripts/.git/"}
+]},
+{id:"daily",t:"Daily work",n:"The loop you repeat all day: look, stage, save a commit. Staging (add) picks what goes into the next commit.",c:[
+{c:"git status",d:"The command to run most often. Shows which files changed, which are staged for the next commit, and which are new and untracked.",ex:"git status",out:"On branch main\nChanges not staged for commit:\n\tmodified:   notes.txt\nUntracked files:\n\tnew.txt"},
+{c:"git status -s",d:"Short version: two letters per file. Left column = staged, right column = not staged. ?? means untracked.",ex:"git status -s",out:" M notes.txt\nA  login.txt\n?? new.txt"},
+{c:"git add <file>",d:"Stages a file, meaning 'include this in my next commit'. Use a folder name or a dot to stage many.",ex:"git add notes.txt",out:"(no output; git status -s now shows M  notes.txt)"},
+{c:"git add -A",d:"Stages everything: new, changed and deleted files in the whole repo. Check git status first so you don't stage something you did not mean to (passwords, large dumps).",kind:"care",ex:"git add -A",out:"(no output)"},
+{c:"git commit -m \"message\"",d:"Saves the staged changes as one commit, a permanent snapshot with your message. Write the message as what the change does.",ex:"git commit -m \"Add notes file\"",out:"[main 9bfeb4e] Add notes file\n 1 file changed, 1 insertion(+)\n create mode 100644 notes.txt"},
+{c:"git commit -am \"message\"",d:"Shortcut: stages every already-tracked file that changed, then commits. It does not pick up brand-new files.",ex:"git commit -am \"Fix typo in notes\"",out:"[main e9099ad] Fix typo in notes\n 1 file changed, 1 insertion(+), 1 deletion(-)"},
+{c:"git diff",d:"Shows line-by-line what you changed but have not staged yet. - is the old line, + is the new one.",ex:"git diff",out:"--- a/notes.txt\n+++ b/notes.txt\n@@ -1 +1 @@\n-hello\n+hello world"},
+{c:"git diff --staged",d:"Shows what is staged, i.e. exactly what the next commit will contain. Good last check before committing.",ex:"git diff --staged",out:"--- a/notes.txt\n+++ b/notes.txt\n@@ -1 +1 @@\n-hello\n+hello world"},
+{c:"git log --oneline",d:"Commit history, one line each: short id and message, newest first.",ex:"git log --oneline",out:"e9099ad Update notes\n9bfeb4e Add notes file"},
+{c:"git mv <old> <new>  /  git rm <file>",d:"Rename or delete a tracked file and stage that change in one go.",m:1,ex:"git mv old_name.sql new_name.sql\ngit rm obsolete.sql",out:"(no output; git status -s shows R  old_name.sql -> new_name.sql and D  obsolete.sql)"},
+{c:".gitignore",d:"A text file listing names or patterns git should never track, such as logs, dumps or credentials. Commit it so everyone shares it.",m:1,ex:"printf '*.log\\n*.dump\\n.env\\n' >> .gitignore\ngit add .gitignore && git commit -m \"Ignore logs, dumps and .env\"",out:"[main e6e2d1b] Ignore logs, dumps and .env\n 1 file changed, 3 insertions(+)\n create mode 100644 .gitignore"}
+]},
+{id:"branches",t:"Branches",n:"A branch is a separate line of work. Try things on a branch and bring them back to main only when they are ready.",c:[
+{c:"git branch",d:"Lists local branches. The * marks the one you are on. Add -a to include remote ones.",ex:"git branch",out:"  feature/login\n* main"},
+{c:"git switch -c <name>",d:"Creates a new branch from where you are and moves onto it. (Older guides use git checkout -b <name>; it does the same.)",ex:"git switch -c feature/login",out:"Switched to a new branch 'feature/login'"},
+{c:"git switch <name>",d:"Moves to an existing branch. Your files change to match that branch.",ex:"git switch main",out:"Switched to branch 'main'\nYour branch is up to date with 'origin/main'."},
+{c:"git merge <branch>",d:"Brings the commits of another branch into the one you are on. Run it while on main to pull a finished feature in. Add --no-ff to always record a merge commit.",m:1,ex:"git switch main\ngit merge feature/login",out:"Updating e9099ad..6a971ab\nFast-forward\n login.txt | 1 +\n 1 file changed, 1 insertion(+)"},
+{c:"Merge conflict",d:"If both branches changed the same lines, git stops and marks the file with <<<<<<< ======= >>>>>>>. Edit the file to keep what you want, remove the markers, then add and commit. Or back out with --abort.",kind:"care",m:1,ex:"git status -s          # UU = both sides changed\n# edit the file, remove the <<<< ==== >>>> lines\ngit add notes.txt\ngit commit             # finishes the merge\ngit merge --abort      # or: give up and go back",out:"Auto-merging notes.txt\nCONFLICT (content): Merge conflict in notes.txt\nAutomatic merge failed; fix conflicts and then commit the result."},
+{c:"git branch -d <name>",d:"Deletes a branch you no longer need. -d refuses if it has unmerged work, which is a safe default.",ex:"git branch -d feature/login",out:"Deleted branch feature/login (was 6a971ab)."},
+{c:"git rebase main",d:"Replays your branch's commits on top of the latest main, giving a straight-line history instead of a merge commit. Basics: use it on your own branches that nobody else is using.",kind:"care",w:"Rebase rewrites your branch's commits (new ids). If that branch is already pushed, you will need push --force-with-lease afterwards. If it stops on a conflict: fix, git add, git rebase --continue, or git rebase --abort.",m:1,ex:"git switch feature/login\ngit rebase main",out:"Successfully rebased and updated refs/heads/feature/login."},
+{c:"git cherry-pick <commit>",d:"Copies one specific commit from another branch onto the branch you are on.",ex:"git cherry-pick 6c26bfc",out:"[main 0f9bd58] Add c\n 1 file changed, 1 insertion(+)\n create mode 100644 c.txt"}
+]},
+{id:"remote",t:"Remote (GitHub)",n:"The remote is the copy on GitHub, usually called origin. Your commits stay local until you push.",c:[
+{c:"git remote -v",d:"Shows the remote copies this repo knows about and their URLs.",ex:"git remote -v",out:"origin\thttps://github.com/manideepgrandhi/pg-commands.git (fetch)\norigin\thttps://github.com/manideepgrandhi/pg-commands.git (push)"},
+{c:"git remote add origin <url>",d:"Connects a repo you made with git init to an (empty) repo on GitHub.",ex:"git remote add origin https://github.com/manideepgrandhi/my-scripts.git",out:"(no output)"},
+{c:"git fetch",d:"Downloads new commits from the remote but does not change your files or branches. Safe to run any time; then compare with git status.",ex:"git fetch\ngit status -sb",m:1,out:"From github.com:manideepgrandhi/pg-commands\n   e9099ad..60aadbb  main       -> origin/main\n## main...origin/main [ahead 2, behind 1]"},
+{c:"git pull",d:"fetch + merge: downloads and applies the remote's new commits to your current branch. Do it before you start work.",ex:"git pull",out:"Updating e9099ad..60aadbb\nFast-forward\n n.txt | 1 +\n 1 file changed, 1 insertion(+)"},
+{c:"git pull --rebase",d:"Same, but puts your local commits on top of the remote's instead of creating a merge commit. Also fixes the 'divergent branches' error.",ex:"git pull --rebase",out:"Successfully rebased and updated refs/heads/main."},
+{c:"git push",d:"Uploads your new commits on this branch to the remote.",ex:"git push",out:"To github.com:manideepgrandhi/pg-commands.git\n   60aadbb..e017b2a  main -> main"},
+{c:"git push -u origin <branch>",d:"First push of a new branch. -u links it to the remote branch, so plain git push and git pull work from then on.",ex:"git push -u origin feature/login",out:"To github.com:manideepgrandhi/pg-commands.git\n * [new branch]      feature/login -> feature/login\nbranch 'feature/login' set up to track 'origin/feature/login'."},
+{c:"git push origin --delete <branch>",d:"Deletes a branch on the remote (after its pull request is merged). GitHub can also do this for you.",kind:"care",ex:"git push origin --delete feature/login",out:"To github.com:manideepgrandhi/pg-commands.git\n - [deleted]         feature/login"}
+]},
+{id:"undo",t:"Undo & fix",n:"Pick by situation: not committed yet (restore), last commit is wrong (amend), commit is already shared (revert). Hard reset and force push can lose work.",c:[
+{c:"git restore <file>",d:"Throws away your unsaved edits to a file and brings back the last committed version.",kind:"danger",w:"Edits that were never committed cannot be recovered.",ex:"git restore notes.txt",out:"(no output; the file is back to its last committed text)"},
+{c:"git restore --staged <file>",d:"Un-stages a file (the opposite of git add). Your edits stay in the file.",ex:"git restore --staged notes.txt",out:"(no output; git status -s changes from M  to  M)"},
+{c:"git commit --amend",d:"Fixes the last commit: change its message, or add files you forgot (stage them first). It replaces that commit with a new one.",kind:"care",w:"Only amend a commit you have not pushed. If it is already pushed, you need push --force-with-lease afterwards.",m:1,ex:"git commit --amend -m \"Add a.txt\"\n# forgot a file? stage it, then:\ngit add forgotten.sql\ngit commit --amend --no-edit",out:"[main 31d62c0] Add a.txt\n 1 file changed, 1 insertion(+)"},
+{c:"git commit --amend --reset-author --no-edit",d:"Re-stamps the last commit with the name and email git is using now. This is the fix when a commit shows the wrong author: correct the config first (see Setup), then run this.",kind:"care",w:"Rewrites the commit. If it is already pushed you must follow it with push --force-with-lease.",m:1,ex:"git config --show-origin user.email   # confirm the right email\ngit commit --amend --reset-author --no-edit\ngit log -1 --format='%an <%ae>'",out:"Manideep Grandhi <manideepgrandhi@users.noreply.github.com>"},
+{c:"git reset --soft HEAD~1",d:"Undoes the last commit but keeps all its changes staged, ready to commit again. Handy for 'wrong message' or 'should have been two commits'.",kind:"care",ex:"git reset --soft HEAD~1",out:"(no output; git status -s shows the files as staged, git log has one commit fewer)"},
+{c:"git reset --hard HEAD~1",d:"Deletes the last commit and every change in it and in your working files, going back to how things were one commit ago.",kind:"danger",w:"Uncommitted changes are gone for good. Committed work can usually be rescued for a while with git reflog, but do not count on it. Never do this to commits others have pulled.",ex:"git reset --hard HEAD~1",out:"HEAD is now at e017b2a Add c"},
+{c:"git revert <commit>",d:"Undoes an old commit by adding a new commit that does the opposite. History stays intact, so this is the safe way to undo something already pushed.",ex:"git revert --no-edit HEAD",out:"[main b8eeb18] Revert \"Add c\"\n 1 file changed, 1 deletion(-)\n delete mode 100644 c.txt"},
+{c:"git push --force-with-lease",d:"Overwrites the remote branch with your rewritten one (after amend, rebase or reset). The 'with-lease' part refuses if someone else pushed in the meantime, unlike plain --force.",kind:"danger",w:"Replaces history on GitHub. Use only on your own branch or a repo only you use; never on shared main without agreement. A normal git push is rejected after a rewrite, which is what this fixes.",ex:"git push --force-with-lease",out:"To github.com:manideepgrandhi/pg-commands.git\n + f92ff77...3d1c97c main -> main (forced update)"},
+{c:"git reflog",d:"Your private diary of where HEAD has been, including commits that look lost after a reset. Find the id, then git reset --hard <id> or git switch -c rescue <id>.",ex:"git reflog",out:"3d1c97c HEAD@{0}: commit (amend): Add b2.txt\nf92ff77 HEAD@{1}: commit (amend): Wrong author\ne017b2a HEAD@{2}: reset: moving to HEAD~1"}
+]},
+{id:"stash",t:"Stash",n:"A drawer for half-done work. Use it when you must switch branches but are not ready to commit.",c:[
+{c:"git stash",d:"Puts your uncommitted changes in the drawer and gives you a clean folder.",ex:"git stash",out:"Saved working directory and index state WIP on main: 3d1c97c Add b2.txt"},
+{c:"git stash push -u -m \"note\"",d:"Same, but also stashes new untracked files (-u) and labels it so you can recognise it later.",ex:"git stash push -u -m \"half-done edit\"",out:"Saved working directory and index state On main: half-done edit"},
+{c:"git stash list",d:"Shows what is in the drawer, newest first.",ex:"git stash list",out:"stash@{0}: On main: half-done edit"},
+{c:"git stash pop",d:"Takes the newest stash out and re-applies it to your files. (git stash apply keeps a copy in the drawer.)",ex:"git stash pop",out:"On branch main\nChanges not staged for commit:\n\tmodified:   notes.txt\n\nDropped refs/stash@{0} (eb39189d977d...)"},
+{c:"git stash drop",d:"Deletes the newest stash without applying it.",kind:"care",ex:"git stash drop",out:"Dropped refs/stash@{0} (3ab2c98d1c56b418d9096b381cede438cb0491ac)"}
+]},
+{id:"tags",t:"Tags",n:"A tag is a permanent name for one commit, usually a release such as v1.0.",c:[
+{c:"git tag -a <name> -m \"message\"",d:"Creates an annotated tag (with your name, date and a message) on the current commit. Prefer this over a plain tag.",ex:"git tag -a v1.1 -m \"Release 1.1\"",out:"(no output)"},
+{c:"git tag",d:"Lists all tags.",ex:"git tag",out:"v1.0\nv1.1"},
+{c:"git push origin <tag>",d:"Tags are not sent by a normal push. Push the one you made, or all of them with git push --tags.",ex:"git push origin v1.1",out:"To github.com:manideepgrandhi/pg-commands.git\n * [new tag]         v1.1 -> v1.1"},
+{c:"git tag -d <name>",d:"Deletes a tag locally. If it was pushed, remove it on the remote too with git push origin --delete <name>.",kind:"care",ex:"git tag -d v1.0",out:"Deleted tag 'v1.0' (was 3d1c97c)"}
+]},
+{id:"inspect",t:"Inspecting",n:"Read-only commands to answer 'what changed, who changed it, and when'. Safe to run any time.",c:[
+{c:"git log --oneline --graph --decorate --all",d:"The whole picture: every branch drawn as a graph, with branch and tag names next to the commits.",ex:"git log --oneline --graph --decorate --all",out:"* 3d1c97c (HEAD -> main, tag: v1.1, origin/main) Add b2.txt\n* 31d62c0 Add a.txt\n| * 2373e44 (feature/b) Add b\n|/\n* 6a971ab Add login"},
+{c:"git show <commit>",d:"Shows one commit: author, date, message and the exact changes. Without an id it shows the latest commit. --stat gives just the file list.",ex:"git show --stat HEAD",out:"commit 3d1c97c...\nAuthor: Manideep Grandhi <manideepgrandhi@users.noreply.github.com>\nDate:   Fri Nov 20 10:00:00 2026 +0530\n\n    Add b2.txt\n\n b2.txt | 1 +\n 1 file changed, 1 insertion(+)"},
+{c:"git blame <file>",d:"Shows, for every line of a file, which commit and person last changed it.",ex:"git blame notes.txt",out:"e9099adf (Manideep Grandhi 2026-11-20 10:00:00 +0530 1) hello world"},
+{c:"git log --oneline -- <file>",d:"History of just one file. Add -p to see the changes of each commit too.",ex:"git log --oneline -- notes.txt",out:"e9099ad Update notes\n9bfeb4e Add notes file"},
+{c:"git log -S\"text\"",d:"Finds the commits where a piece of text was added or removed. Useful for 'when did this line appear?'.",ex:"git log -S\"world\" --oneline",out:"e9099ad Update notes"},
+{c:"git log --author --since",d:"Filters the history by person and time.",ex:"git log --author=\"Manideep\" --since=\"2 weeks ago\" --oneline",out:"093d327 Add d\n1992a66 Merge f/d"},
+{c:"git diff <branch-a> <branch-b>",d:"Compares two branches (or two commits). Add --stat for a file summary only.",ex:"git diff --stat main feature/b",out:" b.txt    | 1 +\n 2 files changed, 3 insertions(+), 5 deletions(-)"}
+]},
+{id:"workflow",t:"A typical workflow",n:"Branch, commit, push, pull request, merge. Run the steps in order inside a repository that has a GitHub remote.",steps:1,c:[
+{c:"1. Get the latest main, start a branch",d:"Never work directly on main; a branch keeps your change separate until it is reviewed.",m:1,ex:"git switch main\ngit pull\ngit switch -c fix/backup-script",out:"Switched to a new branch 'fix/backup-script'"},
+{c:"2. Make changes, check them, commit",d:"Look at what changed, stage it, commit with a clear message.",m:1,ex:"git status -s\ngit diff\ngit add backup.sh\ngit commit -m \"Fix retention check in backup.sh\"",out:"[fix/backup-script 5d2f7a1] Fix retention check in backup.sh\n 1 file changed, 2 insertions(+), 1 deletion(-)"},
+{c:"3. Push the branch",d:"Uploads the branch to GitHub. -u links it for later pushes.",ex:"git push -u origin fix/backup-script",out:"To github.com:manideepgrandhi/my-scripts.git\n * [new branch]      fix/backup-script -> fix/backup-script"},
+{c:"4. Open a pull request",d:"A pull request asks for your branch to be merged into main, and is where review and checks happen. gh does it from the terminal.",ex:"gh pr create --title \"Fix retention check\" --body \"Fixes the off-by-one in the retention check\"",out:"https://github.com/manideepgrandhi/my-scripts/pull/3"},
+{c:"5. Merge it, then tidy up",d:"After approval, merge on GitHub or with gh. Then switch back to main, pull the merged result and delete the finished branch.",m:1,ex:"gh pr merge 3 --squash --delete-branch\ngit switch main\ngit pull",out:"Squashed and merged pull request #3\nDeleted branch fix/backup-script"}
+]},
+{id:"gh",t:"gh CLI basics",n:"gh is GitHub's own command-line tool. It does things git cannot, like pull requests, and handles login for you.",c:[
+{c:"gh auth login / gh auth status",d:"Signs you in to GitHub (follow the prompts) and later checks who you are signed in as.",ex:"gh auth status",out:"github.com\n  ✓ Logged in to github.com account manideepgrandhi\n  - Git operations protocol: https"},
+{c:"gh repo clone <owner/repo>",d:"Like git clone but needs only the repository name.",ex:"gh repo clone manideepgrandhi/pg-commands",out:"Cloning into 'pg-commands'..."},
+{c:"gh repo create <name> --public --clone",d:"Creates a new repository on GitHub and clones it. Use --private to keep it private.",kind:"care",ex:"gh repo create my-scripts --public --clone",out:"✓ Created repository manideepgrandhi/my-scripts on GitHub\n✓ Cloned repository manideepgrandhi/my-scripts"},
+{c:"gh pr create",d:"Opens a pull request for the branch you are on. Without --title and --body it asks you questions.",ex:"gh pr create --fill",out:"https://github.com/manideepgrandhi/my-scripts/pull/4"},
+{c:"gh pr list / gh pr view --web",d:"Lists open pull requests, or opens one in your browser.",m:1,ex:"gh pr list\ngh pr view 4 --web",out:"#4  Fix retention check  fix/backup-script  about 1 minute ago"},
+{c:"gh pr checkout <number>",d:"Downloads someone's pull request branch so you can try it locally.",ex:"gh pr checkout 4",out:"Switched to branch 'fix/backup-script'"},
+{c:"gh pr merge <number>",d:"Merges a pull request. Choose --squash (one commit), --merge or --rebase.",kind:"care",w:"Merging changes main for everyone. Make sure it has been reviewed.",ex:"gh pr merge 4 --squash --delete-branch",out:"Squashed and merged pull request #4"}
+]}
+];
+
+var main=document.getElementById("main"),chips=document.getElementById("chips"),q=document.getElementById("q"),countEl=document.getElementById("count"),empty=document.getElementById("empty");
+var total=0,cards=[];
+function el(tag,cls,txt){var e=document.createElement(tag);if(cls)e.className=cls;if(txt!=null)e.textContent=txt;return e}
+function build(){
+ GROUPS.forEach(function(g){
+  total+=g.c.length;
+  var a=el("a",null,g.t+" "+g.c.length);a.href="#"+g.id;chips.appendChild(a);
+  var sec=el("section");sec.id=g.id;sec.dataset.g=g.id;
+  sec.appendChild(el("h2",null,g.t));sec.appendChild(el("p","gnote",g.n));
+  var grid=el("div",g.steps?"steps":"grid");
+  g.c.forEach(function(x){
+   var host=grid;if(g.steps){host=el("div","step");grid.appendChild(host)}
+   var card=el("article","card");
+   var h=el("h3");h.appendChild(el("span",null,x.c));
+   if(x.kind){h.appendChild(el("span","badge "+x.kind,x.kind==="danger"?"Risky":"Careful"))}
+   card.appendChild(h);card.appendChild(el("p",null,x.d));
+   if(x.w){card.appendChild(el("p","warn"+(x.kind==="danger"?" danger":""))).innerHTML="<b>"+(x.kind==="danger"?"Warning: ":"Note: ")+"</b>";card.lastChild.appendChild(document.createTextNode(x.w))}
+   var ex=el("div","ex"+(x.m?" multi":"")),pre=el("pre");
+   var code=el("code",null,x.ex);pre.appendChild(code);ex.appendChild(pre);
+   var b=el("button","copy","Copy");b.type="button";b.setAttribute("aria-label","Copy example: "+x.c);b.dataset.text=x.ex;ex.appendChild(b);
+   card.appendChild(ex);
+   card.appendChild(el("div","outl","You'd see"));
+   card.appendChild(el("pre","out",x.out));
+   if(g.steps)host.appendChild(card);else grid.appendChild(card);
+   cards.push({card:card,host:host,sec:sec,text:(g.t+" "+x.c+" "+x.d+" "+x.ex+" "+(x.w||"")).toLowerCase()});
+  });
+  sec.appendChild(grid);main.appendChild(sec);
+ });
+}
+function filter(){
+ var words=q.value.toLowerCase().split(/\s+/).filter(Boolean),shown=0,per={};
+ cards.forEach(function(c){
+  var ok=words.every(function(w){return c.text.indexOf(w)>-1});
+  c.host.style.display=ok?"":"none";
+  if(ok){shown++;per[c.sec.id]=(per[c.sec.id]||0)+1}
+ });
+ [].forEach.call(main.children,function(s){s.style.display=per[s.id]||!words.length?"":"none"});
+ countEl.textContent=words.length?shown+" of "+total:total+" commands";
+ empty.style.display=shown?"none":"block";
+}
+function copy(text,btn){
+ function done(){btn.textContent="Copied";btn.classList.add("ok");setTimeout(function(){btn.textContent="Copy";btn.classList.remove("ok")},1400)}
+ function fallback(){var t=document.createElement("textarea");t.value=text;t.style.position="fixed";t.style.opacity="0";document.body.appendChild(t);t.select();try{document.execCommand("copy");done()}catch(e){btn.textContent="Press Ctrl+C"}document.body.removeChild(t)}
+ if(navigator.clipboard&&window.isSecureContext)navigator.clipboard.writeText(text).then(done,fallback);else fallback();
+}
+main.addEventListener("click",function(e){var b=e.target.closest(".copy");if(b)copy(b.dataset.text,b)});
+q.addEventListener("input",filter);
+document.addEventListener("keydown",function(e){
+ if(e.key==="/"&&document.activeElement!==q&&!e.ctrlKey&&!e.metaKey&&!e.altKey){e.preventDefault();q.focus();q.select()}
+ else if(e.key==="Escape"&&document.activeElement===q){q.value="";filter();q.blur()}
+});
+build();filter();
+if(location.hash){var t=document.getElementById(location.hash.slice(1));if(t)t.scrollIntoView()}
+</script>
+</body>
+</html>
